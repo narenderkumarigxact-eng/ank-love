@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Be My Valentine ❤️</title>
+
+<style>
+  body {
+    margin: 0;
+    height: 100vh;
+    font-family: 'Segoe UI', sans-serif;
+    background: linear-gradient(135deg, #ff758c, #ff7eb3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+
+  /* FLOATING BACKGROUND HEARTS */
+  .bg-heart {
+    position: absolute;
+    color: rgba(255,255,255,0.4);
+    animation: float 8s infinite linear;
+  }
+
+  @keyframes float {
+    from { transform: translateY(110vh); opacity: 0; }
+    50% { opacity: 1; }
+    to { transform: translateY(-10vh); opacity: 0; }
+  }
+
+  .card {
+    background: white;
+    padding: 35px 30px;
+    border-radius: 28px;
+    text-align: center;
+    width: 90%;
+    max-width: 420px;
+    box-shadow:
+      0 15px 35px rgba(0,0,0,0.25),
+      0 40px 90px rgba(255,77,109,0.6);
+    position: relative;
+    z-index: 10;
+  }
+
+  h1 {
+    color: #ff2f68;
+    font-size: 34px;
+    font-weight: 800;
+    text-shadow: 0 3px 12px rgba(255,47,104,0.5);
+  }
+
+  p {
+    font-size: 20px;
+    font-weight: 600;
+    line-height: 1.6;
+    margin-bottom: 35px;
+    color: #444;
+  }
+
+  button {
+    font-size: 18px;
+    font-weight: 700;
+    padding: 14px 34px;
+    border: none;
+    border-radius: 35px;
+    cursor: pointer;
+    transition: 0.3s;
+  }
+
+  #yes {
+    background: linear-gradient(135deg, #ff4d6d, #ff758c);
+    color: white;
+    margin-right: 15px;
+    box-shadow: 0 10px 25px rgba(255,77,109,0.6);
+    animation: pulse 1.4s infinite;
+  }
+
+  #yes:hover { transform: scale(1.1); }
+
+  #no {
+    background: #ddd;
+    position: absolute;
+  }
+
+  @keyframes pulse {
+    0%,100% { transform: scale(1); }
+    50% { transform: scale(1.08); }
+  }
+
+  /* LOVE SCREEN */
+  .love-layout {
+    display: none;
+    text-align: center;
+    animation: fadeIn 1.5s ease;
+    z-index: 10;
+  }
+
+  .love-layout img {
+    width: 260px;
+    max-width: 80%;
+    border-radius: 22px;
+    box-shadow:
+      0 20px 45px rgba(0,0,0,0.4),
+      0 0 35px rgba(255,77,109,0.7);
+    margin-bottom: 25px;
+  }
+
+  .love-text {
+    font-size: 22px;
+    font-weight: 700;
+    color: #ff2f68;
+    min-height: 120px;
+    text-shadow: 0 2px 10px rgba(255,47,104,0.4);
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: scale(0.9); }
+    to { opacity: 1; transform: scale(1); }
+  }
+
+  /* HEART EXPLOSION */
+  .burst {
+    position: absolute;
+    font-size: 22px;
+    animation: burst 1.5s ease forwards;
+    pointer-events: none;
+  }
+
+  @keyframes burst {
+    from { transform: scale(0); opacity: 1; }
+    to {
+      transform: translate(var(--x), var(--y)) scale(1.5);
+      opacity: 0;
+    }
+  }
+</style>
+</head>
+
+<body>
+
+<!-- Background hearts -->
+<script>
+  for (let i = 0; i < 30; i++) {
+    const h = document.createElement("div");
+    h.className = "bg-heart";
+    h.innerHTML = "❤️";
+    h.style.left = Math.random() * 100 + "vw";
+    h.style.fontSize = 16 + Math.random() * 30 + "px";
+    h.style.animationDelay = Math.random() * 8 + "s";
+    document.body.appendChild(h);
+  }
+</script>
+
+<div id="question" class="card">
+  <h1>Anu ❤️</h1>
+  <p>
+    You are my smile, my peace,<br>
+    my favorite place forever.<br><br>
+    Will you be my Valentine? 💖
+  </p>
+
+  <button id="yes" onclick="yesClicked()">Yes 💕</button>
+  <button id="no">No 🙈</button>
+</div>
+
+<div id="love" class="love-layout">
+  <img src="love.jpg" alt="My Love Anu">
+  <div id="typedText" class="love-text"></div>
+</div>
+
+<!-- Romantic Music -->
+<audio id="music" loop>
+  <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3">
+</audio>
+
+<script>
+
+  const noBtn = document.getElementById("no");
+  const card = document.querySelector(".card");
+
+  moveNoButton(); // initial position
+
+  function moveNoButton() {
+    const cardRect = card.getBoundingClientRect();
+    const btnRect = noBtn.getBoundingClientRect();
+
+    const padding = 15;
+
+    const maxX = cardRect.width - btnRect.width - padding;
+    const maxY = cardRect.height - btnRect.height - padding;
+
+    const x = Math.random() * maxX;
+    const y = Math.random() * maxY;
+
+    noBtn.style.left = x + "px";
+    noBtn.style.top = y + "px";
+    noBtn.style.transform = `rotate(${Math.random() * 30 - 15}deg)`;
+  }
+
+  // sirf paas jaane par hi move ho
+  noBtn.addEventListener("mouseenter", moveNoButton);
+
+
+  function heartBurst() {
+    for (let i = 0; i < 25; i++) {
+      const b = document.createElement("div");
+      b.className = "burst";
+      b.innerHTML = "💖";
+      b.style.left = "50%";
+      b.style.top = "50%";
+      b.style.setProperty("--x", (Math.random()*400-200)+"px");
+      b.style.setProperty("--y", (Math.random()*400-200)+"px");
+      document.body.appendChild(b);
+      setTimeout(()=>b.remove(),1500);
+    }
+  }
+
+  function typeText(text, el) {
+    let i = 0;
+    const timer = setInterval(() => {
+      el.innerHTML += text.charAt(i);
+      i++;
+      if (i === text.length) clearInterval(timer);
+    }, 50);
+  }
+
+  function yesClicked() {
+    document.getElementById("music").play();
+    heartBurst();
+    document.getElementById("question").style.display = "none";
+    document.getElementById("love").style.display = "block";
+
+    const message =
+      "You said YES 💕\n\n" +
+      "With you, every moment feels like magic ✨\n" +
+      "My heart is forever yours, Anu ❤️\n\n" +
+      "I love you endlessly 💞";
+
+    typeText(message, document.getElementById("typedText"));
+  }
+</script>
+
+</body>
+</html>
